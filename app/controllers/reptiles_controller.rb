@@ -7,7 +7,11 @@ class ReptilesController < ApplicationController
 
     def create
         reptile = Reptile.create(reptile_params)
-        render json: reptile
+        if reptile.valid?
+            render json: reptile
+        else
+            render json: reptile.errors, status: 422
+        end
     end
 
     def update
