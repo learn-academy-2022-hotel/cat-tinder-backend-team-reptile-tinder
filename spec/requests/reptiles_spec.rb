@@ -67,8 +67,65 @@ RSpec.describe "Reptiles", type: :request do
   #   end
   # end
 
+  it "doesn't create a reptile without a name" do
+    reptile_params = {
+      reptile: {
+        age: 7,
+        enjoys: 'Walks on the beach',
+        image: 'image link here'
+      }
+    }
 
+    post '/reptiles', params: reptile_params
+    expect(response.status).to eq 422
+    json = JSON.parse(response.body)
+    expect(json['name']).to include "can't be blank"
+  end
 
+  it "doesn't create a reptile without an age" do
+    reptile_params = {
+      reptile: {
+        name: 'Shakespeare',
+        enjoys: 'Walks on the beach',
+        image: 'image link here'
+      }
+    }
+
+    post '/reptiles', params: reptile_params
+    expect(response.status).to eq 422
+    json = JSON.parse(response.body)
+    expect(json['age']).to include "can't be blank"
+  end
+
+  it "doesn't create a reptile without enjoys" do
+    reptile_params = {
+      reptile: {
+        name: 'Shakespeare',
+        age: 7,
+        image: 'image link here'
+      }
+    }
+
+    post '/reptiles', params: reptile_params
+    expect(response.status).to eq 422
+    json = JSON.parse(response.body)
+    expect(json['enjoys']).to include "can't be blank"
+  end
+
+  it "doesn't create a reptile without an image" do
+    reptile_params = {
+      reptile: {
+        name: 'Shakespeare',
+        age: 7,
+        enjoys: 'Walks on the beach',
+      }
+    }
+
+    post '/reptiles', params: reptile_params
+    expect(response.status).to eq 422
+    json = JSON.parse(response.body)
+    expect(json['image']).to include "can't be blank"
+  end
 end
 
 
