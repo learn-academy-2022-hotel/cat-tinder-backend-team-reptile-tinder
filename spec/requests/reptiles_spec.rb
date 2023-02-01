@@ -51,11 +51,11 @@ RSpec.describe "Reptiles", type: :request do
      } 
     }
 
-  post '/reptiles', params: reptile_params
-  reptile = Reptile.first
+    post '/reptiles', params: reptile_params
+    reptile = Reptile.first
 
 
-      new_reptile_params = {
+    new_reptile_params = {
       reptile: {
         name: 'Shakespeare',
         age: 7,

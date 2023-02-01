@@ -23,7 +23,7 @@ class ReptilesController < ApplicationController
     def destroy
         reptile = Reptile.find(params[:id])
         reptile.destroy
-        render json: reptile
+        render json: Reptile.all
     end
     
     private
