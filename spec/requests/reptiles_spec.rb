@@ -72,6 +72,132 @@ RSpec.describe "Reptiles", type: :request do
       expect(rep.name).to eq 'Shakespeare'
     end
   end
+  
+
+  it "cannot modify without a name" do
+    reptile_params = {
+      reptile: {
+      name: 'Steve',
+      age: 7,
+      enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+    } 
+  }
+
+post '/reptiles', params: reptile_params
+reptile = Reptile.first
+
+
+    new_reptile_params = {
+    reptile: {
+      name: nil,
+      age: 7,
+      enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+    }
+  }
+    
+    patch  "/reptiles/#{reptile.id}", params: new_reptile_params
+
+    rep = JSON.parse(response.body)
+    expect(response).to have_http_status(422)
+
+    expect(rep['name']).to include "can't be blank"
+  end
+  
+  it "cannot modify without an age" do
+    reptile_params = {
+      reptile: {
+      name: 'Steve',
+      age: 7,
+      enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+    } 
+  }
+
+post '/reptiles', params: reptile_params
+reptile = Reptile.first
+
+
+    new_reptile_params = {
+    reptile: {
+      name: 'Steve',
+      age: nil,
+      enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+    }
+  }
+    
+    patch  "/reptiles/#{reptile.id}", params: new_reptile_params
+
+    rep = JSON.parse(response.body)
+    expect(response).to have_http_status(422)
+
+    expect(rep['age']).to include "can't be blank"
+  end
+
+  it "cannot modify without an enjoys section" do
+    reptile_params = {
+      reptile: {
+      name: 'Steve',
+      age: 7,
+      enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+    } 
+  }
+
+post '/reptiles', params: reptile_params
+reptile = Reptile.first
+
+
+    new_reptile_params = {
+    reptile: {
+      name: 'Steve',
+      age: 7,
+      enjoys: nil,
+      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+    }
+  }
+    
+    patch  "/reptiles/#{reptile.id}", params: new_reptile_params
+
+    rep = JSON.parse(response.body)
+    expect(response).to have_http_status(422)
+
+    expect(rep['enjoys']).to include "can't be blank"
+  end
+
+  it "cannot modify without an image" do
+    reptile_params = {
+      reptile: {
+      name: 'Steve',
+      age: 7,
+      enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+    } 
+  }
+
+post '/reptiles', params: reptile_params
+reptile = Reptile.first
+
+
+    new_reptile_params = {
+    reptile: {
+      name: 'Steve',
+      age: 7,
+      enjoys: "Fun stuff",
+      image: nil
+    }
+  }
+    
+    patch  "/reptiles/#{reptile.id}", params: new_reptile_params
+
+    rep = JSON.parse(response.body)
+    expect(response).to have_http_status(422)
+
+    expect(rep['image']).to include "can't be blank"
+  end
+  
 
   describe "DELETE /destroy" do
     it "deletes a reptile" do

@@ -17,7 +17,11 @@ class ReptilesController < ApplicationController
     def update
         reptile = Reptile.find(params[:id])
         reptile.update(reptile_params)
-        render json: reptile
+        if reptile.valid?
+            render json: reptile
+        else
+            render json: reptile.errors, status: 422
+        end
     end
 
     def destroy
