@@ -51,8 +51,8 @@ RSpec.describe "Reptiles", type: :request do
      } 
     }
 
-  post '/reptiles', params: reptile_params
-  reptile = Reptile.first
+    post '/reptiles', params: reptile_params
+    reptile = Reptile.first
 
 
       new_reptile_params = {
@@ -74,128 +74,136 @@ RSpec.describe "Reptiles", type: :request do
   end
   
 
-  it "cannot modify without a name" do
-    reptile_params = {
-      reptile: {
-      name: 'Steve',
-      age: 7,
-      enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
-      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
-    } 
-  }
-
-post '/reptiles', params: reptile_params
-reptile = Reptile.first
-
-
-    new_reptile_params = {
-    reptile: {
-      name: nil,
-      age: 7,
-      enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
-      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+  describe "update name validation" do
+    it "cannot modify without a name" do
+      reptile_params = {
+        reptile: {
+        name: 'Steve',
+        age: 7,
+        enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+        image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+      } 
     }
-  }
-    
-    patch  "/reptiles/#{reptile.id}", params: new_reptile_params
 
-    rep = JSON.parse(response.body)
-    expect(response).to have_http_status(422)
+    post '/reptiles', params: reptile_params
+    reptile = Reptile.first
 
-    expect(rep['name']).to include "can't be blank"
+
+      new_reptile_params = {
+      reptile: {
+        name: nil,
+        age: 7,
+        enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+        image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+      }
+    }
+      
+      patch  "/reptiles/#{reptile.id}", params: new_reptile_params
+
+      rep = JSON.parse(response.body)
+      expect(response).to have_http_status(422)
+
+      expect(rep['name']).to include "can't be blank"
+    end
   end
   
-  it "cannot modify without an age" do
-    reptile_params = {
-      reptile: {
-      name: 'Steve',
-      age: 7,
-      enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
-      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
-    } 
-  }
-
-post '/reptiles', params: reptile_params
-reptile = Reptile.first
-
-
-    new_reptile_params = {
-    reptile: {
-      name: 'Steve',
-      age: nil,
-      enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
-      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+  describe "update age validation" do
+    it "cannot modify without an age" do
+      reptile_params = {
+        reptile: {
+        name: 'Steve',
+        age: 7,
+        enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+        image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+      } 
     }
-  }
-    
-    patch  "/reptiles/#{reptile.id}", params: new_reptile_params
 
-    rep = JSON.parse(response.body)
-    expect(response).to have_http_status(422)
+    post '/reptiles', params: reptile_params
+    reptile = Reptile.first
 
-    expect(rep['age']).to include "can't be blank"
+
+      new_reptile_params = {
+      reptile: {
+        name: 'Steve',
+        age: nil,
+        enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+        image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+      }
+    }
+      
+      patch  "/reptiles/#{reptile.id}", params: new_reptile_params
+
+      rep = JSON.parse(response.body)
+      expect(response).to have_http_status(422)
+
+      expect(rep['age']).to include "can't be blank"
+    end
   end
 
-  it "cannot modify without an enjoys section" do
-    reptile_params = {
-      reptile: {
-      name: 'Steve',
-      age: 7,
-      enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
-      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
-    } 
-  }
-
-post '/reptiles', params: reptile_params
-reptile = Reptile.first
-
-
-    new_reptile_params = {
-    reptile: {
-      name: 'Steve',
-      age: 7,
-      enjoys: nil,
-      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+  describe "update enjoy validation" do
+    it "cannot modify without an enjoys section" do
+      reptile_params = {
+        reptile: {
+        name: 'Steve',
+        age: 7,
+        enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+        image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+      } 
     }
-  }
-    
-    patch  "/reptiles/#{reptile.id}", params: new_reptile_params
 
-    rep = JSON.parse(response.body)
-    expect(response).to have_http_status(422)
+    post '/reptiles', params: reptile_params
+    reptile = Reptile.first
 
-    expect(rep['enjoys']).to include "can't be blank"
+
+      new_reptile_params = {
+      reptile: {
+        name: 'Steve',
+        age: 7,
+        enjoys: nil,
+        image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+      }
+    }
+      
+      patch  "/reptiles/#{reptile.id}", params: new_reptile_params
+
+      rep = JSON.parse(response.body)
+      expect(response).to have_http_status(422)
+
+      expect(rep['enjoys']).to include "can't be blank"
+    end
   end
 
-  it "cannot modify without an image" do
-    reptile_params = {
-      reptile: {
-      name: 'Steve',
-      age: 7,
-      enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
-      image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
-    } 
-  }
-
-post '/reptiles', params: reptile_params
-reptile = Reptile.first
-
-
-    new_reptile_params = {
-    reptile: {
-      name: 'Steve',
-      age: 7,
-      enjoys: "Fun stuff",
-      image: nil
+  describe "update image validation" do
+    it "cannot modify without an image" do
+      reptile_params = {
+        reptile: {
+        name: 'Steve',
+        age: 7,
+        enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+        image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+      } 
     }
-  }
-    
-    patch  "/reptiles/#{reptile.id}", params: new_reptile_params
 
-    rep = JSON.parse(response.body)
-    expect(response).to have_http_status(422)
+    post '/reptiles', params: reptile_params
+    reptile = Reptile.first
 
-    expect(rep['image']).to include "can't be blank"
+
+      new_reptile_params = {
+      reptile: {
+        name: 'Steve',
+        age: 7,
+        enjoys: "Fun stuff",
+        image: nil
+      }
+    }
+      
+      patch  "/reptiles/#{reptile.id}", params: new_reptile_params
+
+      rep = JSON.parse(response.body)
+      expect(response).to have_http_status(422)
+
+      expect(rep['image']).to include "can't be blank"
+    end
   end
   
 
@@ -219,65 +227,72 @@ reptile = Reptile.first
   end
 end
 
-
-  it "doesn't create a reptile without a name" do
-    reptile_params = {
-      reptile: {
-        age: 7,
-        enjoys: 'Walks on the beach',
-        image: 'image link here'
+  describe "create name validation"
+    it "doesn't create a reptile without a name" do
+      reptile_params = {
+        reptile: {
+          age: 7,
+          enjoys: 'Walks on the beach',
+          image: 'image link here'
+        }
       }
-    }
 
-    post '/reptiles', params: reptile_params
-    expect(response.status).to eq 422
-    json = JSON.parse(response.body)
-    expect(json['name']).to include "can't be blank"
+      post '/reptiles', params: reptile_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json['name']).to include "can't be blank"
+    end
   end
 
-  it "doesn't create a reptile without an age" do
-    reptile_params = {
-      reptile: {
-        name: 'Shakespeare',
-        enjoys: 'Walks on the beach',
-        image: 'image link here'
+  describe "create age validation"
+    it "doesn't create a reptile without an age" do
+      reptile_params = {
+        reptile: {
+          name: 'Shakespeare',
+          enjoys: 'Walks on the beach',
+          image: 'image link here'
+        }
       }
-    }
 
-    post '/reptiles', params: reptile_params
-    expect(response.status).to eq 422
-    json = JSON.parse(response.body)
-    expect(json['age']).to include "can't be blank"
+      post '/reptiles', params: reptile_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json['age']).to include "can't be blank"
+    end
   end
 
-  it "doesn't create a reptile without enjoys" do
-    reptile_params = {
-      reptile: {
-        name: 'Shakespeare',
-        age: 7,
-        image: 'image link here'
+  describe "create enjoys validation"
+    it "doesn't create a reptile without enjoys" do
+      reptile_params = {
+        reptile: {
+          name: 'Shakespeare',
+          age: 7,
+          image: 'image link here'
+        }
       }
-    }
 
-    post '/reptiles', params: reptile_params
-    expect(response.status).to eq 422
-    json = JSON.parse(response.body)
-    expect(json['enjoys']).to include "can't be blank"
+      post '/reptiles', params: reptile_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json['enjoys']).to include "can't be blank"
+    end
   end
 
-  it "doesn't create a reptile without an image" do
-    reptile_params = {
-      reptile: {
-        name: 'Shakespeare',
-        age: 7,
-        enjoys: 'Walks on the beach',
+  describe "create image validation"
+    it "doesn't create a reptile without an image" do
+      reptile_params = {
+        reptile: {
+          name: 'Shakespeare',
+          age: 7,
+          enjoys: 'Walks on the beach',
+        }
       }
-    }
 
-    post '/reptiles', params: reptile_params
-    expect(response.status).to eq 422
-    json = JSON.parse(response.body)
-    expect(json['image']).to include "can't be blank"
+      post '/reptiles', params: reptile_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json['image']).to include "can't be blank"
+    end
   end
 end
 
