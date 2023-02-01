@@ -40,32 +40,59 @@ RSpec.describe "Reptiles", type: :request do
     end
   end
   
-  # describe "PATCH /update" do
-  #   it "updates a reptile" do
-  #     Reptile.create(
-  #       name: 'Steve',
-  #       age: 7,
-  #       enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
-  #       image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
-  #     )
-  #     reptile_params = {
-  #     reptile: {
-  #       name: 'Shakespeare',
-  #       age: 7,
-  #       enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
-  #       image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
-  #     }
-  #   }
+  describe "PATCH /update" do
+    it "updates a reptile" do
+      reptile_params = {
+        reptile: {
+        name: 'Steve',
+        age: 7,
+        enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+        image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+     } 
+    }
+
+  post '/reptiles', params: reptile_params
+  reptile = Reptile.first
+
+
+      new_reptile_params = {
+      reptile: {
+        name: 'Shakespeare',
+        age: 7,
+        enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+        image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+      }
+    }
       
-  #     patch  '/reptiles/', params: reptile_params
+      patch  "/reptiles/#{reptile.id}", params: new_reptile_params
 
-  #     expect(response).to have_http_status(200)
+      expect(response).to have_http_status(200)
   
-  #     reptile = Reptile.first
+      rep =  Reptile.first
+      expect(rep.name).to eq 'Shakespeare'
+    end
+  end
 
-  #     expect(reptile.name).to eq 'Shakespeare'
-  #   end
-  # end
+  describe "DELETE /destroy" do
+    it "deletes a reptile" do
+      reptile_params = {
+        reptile: {
+        name: 'Steve',
+        age: 7,
+        enjoys: 'Eating crickets, a lot. Being pet on his little head. Adventuring',
+        image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
+     } 
+    }
+
+    post '/reptiles', params: reptile_params
+    reptile = Reptile.first
+
+    delete "/reptiles/#{reptile.id}"
+
+    expect(response).to have_http_status(200)
+  end
+end
+
 
   it "doesn't create a reptile without a name" do
     reptile_params = {
