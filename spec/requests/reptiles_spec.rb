@@ -38,6 +38,66 @@ RSpec.describe "Reptiles", type: :request do
 
       expect(reptile.name).to eq 'Shakespeare'
     end
+    
+    it "doesn't create a reptile without a name" do
+      reptile_params = {
+        reptile: {
+          age: 7,
+          enjoys: 'Walks on the beach',
+          image: 'image link here'
+        }
+      }
+    
+      post '/reptiles', params: reptile_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json['name']).to include "can't be blank"
+    end
+    
+    it "doesn't create a reptile without an age" do
+      reptile_params = {
+        reptile: {
+          name: 'Shakespeare',
+          enjoys: 'Walks on the beach',
+          image: 'image link here'
+        }
+      }
+    
+      post '/reptiles', params: reptile_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json['age']).to include "can't be blank"
+    end
+    
+    it "doesn't create a reptile without enjoys" do
+      reptile_params = {
+        reptile: {
+          name: 'Shakespeare',
+          age: 7,
+          image: 'image link here'
+        }
+      }
+    
+      post '/reptiles', params: reptile_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json['enjoys']).to include "can't be blank"
+    end
+    
+    it "doesn't create a reptile without an image" do
+      reptile_params = {
+        reptile: {
+          name: 'Shakespeare',
+          age: 7,
+          enjoys: 'Walks on the beach',
+        }
+      }
+    
+      post '/reptiles', params: reptile_params
+      expect(response.status).to eq 422
+      json = JSON.parse(response.body)
+      expect(json['image']).to include "can't be blank"
+    end
   end
   
   describe "PATCH /update" do
@@ -71,10 +131,7 @@ RSpec.describe "Reptiles", type: :request do
       rep =  Reptile.first
       expect(rep.name).to eq 'Shakespeare'
     end
-  end
-  
 
-  describe "update name validation" do
     it "cannot modify without a name" do
       reptile_params = {
         reptile: {
@@ -84,11 +141,11 @@ RSpec.describe "Reptiles", type: :request do
         image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
       } 
     }
-
+  
     post '/reptiles', params: reptile_params
     reptile = Reptile.first
-
-
+  
+  
       new_reptile_params = {
       reptile: {
         name: nil,
@@ -99,15 +156,13 @@ RSpec.describe "Reptiles", type: :request do
     }
       
       patch  "/reptiles/#{reptile.id}", params: new_reptile_params
-
+  
       rep = JSON.parse(response.body)
       expect(response).to have_http_status(422)
-
+  
       expect(rep['name']).to include "can't be blank"
     end
-  end
   
-  describe "update age validation" do
     it "cannot modify without an age" do
       reptile_params = {
         reptile: {
@@ -117,11 +172,11 @@ RSpec.describe "Reptiles", type: :request do
         image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
       } 
     }
-
+  
     post '/reptiles', params: reptile_params
     reptile = Reptile.first
-
-
+  
+  
       new_reptile_params = {
       reptile: {
         name: 'Steve',
@@ -132,15 +187,13 @@ RSpec.describe "Reptiles", type: :request do
     }
       
       patch  "/reptiles/#{reptile.id}", params: new_reptile_params
-
+  
       rep = JSON.parse(response.body)
       expect(response).to have_http_status(422)
-
+  
       expect(rep['age']).to include "can't be blank"
     end
-  end
-
-  describe "update enjoy validation" do
+  
     it "cannot modify without an enjoys section" do
       reptile_params = {
         reptile: {
@@ -150,11 +203,11 @@ RSpec.describe "Reptiles", type: :request do
         image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
       } 
     }
-
+  
     post '/reptiles', params: reptile_params
     reptile = Reptile.first
-
-
+  
+  
       new_reptile_params = {
       reptile: {
         name: 'Steve',
@@ -165,15 +218,13 @@ RSpec.describe "Reptiles", type: :request do
     }
       
       patch  "/reptiles/#{reptile.id}", params: new_reptile_params
-
+  
       rep = JSON.parse(response.body)
       expect(response).to have_http_status(422)
-
+  
       expect(rep['enjoys']).to include "can't be blank"
     end
-  end
-
-  describe "update image validation" do
+  
     it "cannot modify without an image" do
       reptile_params = {
         reptile: {
@@ -183,11 +234,11 @@ RSpec.describe "Reptiles", type: :request do
         image: 'https://images.unsplash.com/photo-1619153832248-6458a856d91f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80'
       } 
     }
-
+  
     post '/reptiles', params: reptile_params
     reptile = Reptile.first
-
-
+  
+  
       new_reptile_params = {
       reptile: {
         name: 'Steve',
@@ -198,14 +249,13 @@ RSpec.describe "Reptiles", type: :request do
     }
       
       patch  "/reptiles/#{reptile.id}", params: new_reptile_params
-
+  
       rep = JSON.parse(response.body)
       expect(response).to have_http_status(422)
-
+  
       expect(rep['image']).to include "can't be blank"
     end
   end
-  
 
   describe "DELETE /destroy" do
     it "deletes a reptile" do
@@ -227,73 +277,6 @@ RSpec.describe "Reptiles", type: :request do
   end
 end
 
-  describe "create name validation"
-    it "doesn't create a reptile without a name" do
-      reptile_params = {
-        reptile: {
-          age: 7,
-          enjoys: 'Walks on the beach',
-          image: 'image link here'
-        }
-      }
-
-      post '/reptiles', params: reptile_params
-      expect(response.status).to eq 422
-      json = JSON.parse(response.body)
-      expect(json['name']).to include "can't be blank"
-    end
-  end
-
-  describe "create age validation"
-    it "doesn't create a reptile without an age" do
-      reptile_params = {
-        reptile: {
-          name: 'Shakespeare',
-          enjoys: 'Walks on the beach',
-          image: 'image link here'
-        }
-      }
-
-      post '/reptiles', params: reptile_params
-      expect(response.status).to eq 422
-      json = JSON.parse(response.body)
-      expect(json['age']).to include "can't be blank"
-    end
-  end
-
-  describe "create enjoys validation"
-    it "doesn't create a reptile without enjoys" do
-      reptile_params = {
-        reptile: {
-          name: 'Shakespeare',
-          age: 7,
-          image: 'image link here'
-        }
-      }
-
-      post '/reptiles', params: reptile_params
-      expect(response.status).to eq 422
-      json = JSON.parse(response.body)
-      expect(json['enjoys']).to include "can't be blank"
-    end
-  end
-
-  describe "create image validation"
-    it "doesn't create a reptile without an image" do
-      reptile_params = {
-        reptile: {
-          name: 'Shakespeare',
-          age: 7,
-          enjoys: 'Walks on the beach',
-        }
-      }
-
-      post '/reptiles', params: reptile_params
-      expect(response.status).to eq 422
-      json = JSON.parse(response.body)
-      expect(json['image']).to include "can't be blank"
-    end
-  end
 end
 
 
