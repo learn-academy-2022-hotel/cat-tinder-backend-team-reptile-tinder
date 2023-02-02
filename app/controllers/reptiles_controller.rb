@@ -21,6 +21,9 @@ class ReptilesController < ApplicationController
     end
 
     def destroy
+        reptile = Reptile.find(params[:id])
+        reptile.destroy
+        render json: Reptile.all
     end
     
     private
